@@ -1,7 +1,7 @@
-import { createEvent } from './functions'
+import { createEvent } from './functions';
 
 beforeAll(() => {
-    global.Date.now = jest.fn(() => new Date('2020-04-07T10:20:30Z').getTime())
+    global.Date.now = jest.fn(() => new Date('2021-12-07T10:20:30Z').getTime())
 });
 
 const data = {
@@ -10,6 +10,21 @@ const data = {
     openHour: 8,
     closeHour: 14
 }
+
+function addDays(days) {
+    return new Date(new Date().setDate(new Date().getDate() + days));
+}
+
+function getDateCalendar(numDay, currentDay) {
+    if (numDay >= currentDay && parseInt(data.closeHour) >= hour) {//posterior a dia de la semana
+        return addDays((numDay - currentDay) + 7 * (data.week - 1));
+    }
+    return addDays((numDay - currentDay) + 7 * (data.week - 1));
+}
+
+const NUM_DAY = { 'mon': 1, 'tue': 2, 'wed': 3, 'thu': 4, 'fri': 5, 'sat': 6, 'sun': 7 };
+
+const hour = new Date().getHours();
 
 test('Validation a event title and content basic', () => {
     //At
@@ -22,24 +37,47 @@ test('Validation a event title and content basic', () => {
 });
 
 test('Validation start date', () => {
-    //Arrage
+    //Arrange
+    const numDay = NUM_DAY[data.weekDay];
+    const currentDay = new Date().getDay();
+    const date = getDateCalendar(numDay, currentDay);
 
     //At
-    
+    const result = createEvent(data.weekDay, data.week, data.openHour, data.closeHour);
 
     //Expected
+    expect(result.start).toEqual(date);
 });
 
 test('Validation date', () => {
-   //TODO: hacer las verificaciones
+    //Arrange
+    const numDay = NUM_DAY[data.weekDay];
+    const currentDay = new Date().getDay();
+    const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+    const date = getDateCalendar(numDay, currentDay);
+    const dateResult = new Date(date).toLocaleDateString('es-ES', options);
+
+    //At
+    const result = createEvent(data.weekDay, data.week, data.openHour, data.closeHour);
+
+    //Expected
+    expect(result.date).toStrictEqual(dateResult);
 });
 
 
 test('Validation illegal arguments', () => {
-    //TODO: hacer las verificaciones
+    //Arrange
+
+    //At
+
+    //Expected
 });
 
 
 test('create an event list of at least 10 events', () => {
-    //TODO: hacer las verificaciones
+    //Arrange
+
+    //At
+
+    //Expected
 });
