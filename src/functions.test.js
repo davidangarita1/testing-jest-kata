@@ -15,6 +15,7 @@ function addDays(days) {
     return new Date(new Date().setDate(new Date().getDate() + days));
 }
 
+// Get the Date
 function getDateCalendar(numDay, currentDay) {
     if (numDay >= currentDay && parseInt(data.closeHour) >= hour) {//posterior a dia de la semana
         return addDays((numDay - currentDay) + 7 * (data.week - 1));
@@ -95,10 +96,10 @@ describe('Validation illegal arguments', () => {
 test('create an event list of at least 10 events', () => {
     //Arrange
     const events = [...Array(10)].map((event) => event = {
-        weekday: Object.keys(NUM_DAY)[Math.floor(Math.random() * 6)],
-        week: Math.trunc(Math.random() * 8) + 1,
-        openHour: 8,
-        closeHour: Math.trunc(Math.random() * 14) + 9,
+        weekday: Object.keys(NUM_DAY)[Math.floor(Math.random() * 6)], //random weekday
+        week: Math.trunc(Math.random() * 8) + 1, //random week
+        openHour: 8, //8:00 always open hour
+        closeHour: Math.trunc(Math.random() * 14) + 9, //random close hour
     });
 
     //Expected
