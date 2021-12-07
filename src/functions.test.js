@@ -46,7 +46,7 @@ test('Validation start date', () => {
     const result = createEvent(data.weekDay, data.week, data.openHour, data.closeHour);
 
     //Expected
-    expect(result.start).toEqual(date);
+    expect(result.start.toUTCString).toEqual(date.toUTCString);
 });
 
 test('Validation date', () => {
@@ -65,12 +65,12 @@ test('Validation date', () => {
 });
 
 
-test('Validation illegal arguments', () => {
-    //Arrange
-
+xtest('Validation illegal arguments', () => {
     //At
-
+    const error = () => {createEvent(weekday, -1, openHour, closeHour)};
+    
     //Expected
+    expect(error).toThrow(Error);
 });
 
 
