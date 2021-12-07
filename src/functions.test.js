@@ -94,6 +94,12 @@ describe('Validation illegal arguments', () => {
 
 test('create an event list of at least 10 events', () => {
     //Arrange
+    const events = [...Array(10)].map((event) => event = {
+        weekDay: Object.keys(NUM_DAY)[Math.floor(Math.random() * Object.keys(NUM_DAY).length)],
+        week: Math.trunc(Math.random() * 10),
+        openHour: 8,
+        closeHour: Math.trunc(Math.random() * 14),
+    });
 
     //At
 
