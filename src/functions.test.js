@@ -65,12 +65,30 @@ test('Validation date', () => {
 });
 
 
-xtest('Validation illegal arguments', () => {
-    //At
-    const error = () => {createEvent(weekday, -1, openHour, closeHour)};
+describe('Validation illegal arguments', () => {
+    test("Illegal check-in times", () => {
+        //At
+        const result = () => createEvent(weekday, week, 15, 14);
+
+        //Expected
+        expect(result).toThrow(Error);        
+    });
+
+    test("Illegal week with positive value", () => {
+        //At
+        const result = () => createEvent(weekday, -1, openHour, closeHour);
+
+        //Expected
+        expect(result).toThrow(Error);        
+    });
     
-    //Expected
-    expect(error).toThrow(Error);
+    test("Illegal weekday", () => {
+        //At
+        const result = () => createEvent("mon", week, openHour, closeHour);
+
+        //Expected
+        expect(result).toThrow(Error);      
+    });
 });
 
 
