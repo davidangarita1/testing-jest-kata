@@ -5,7 +5,7 @@ beforeAll(() => {
 });
 
 const data = {
-    weekDay: 'mon',
+    weekday: 'mon',
     week: 1,
     openHour: 8,
     closeHour: 14
@@ -28,7 +28,7 @@ const hour = new Date().getHours();
 
 test('Validation a event title and content basic', () => {
     //At
-    const result = createEvent(data.weekDay, data.week, data.openHour, data.closeHour);
+    const result = createEvent(data.weekday, data.week, data.openHour, data.closeHour);
 
     //Expected
     expect(result.title).toBe('[SOFKA U] Meeting Room');
@@ -38,12 +38,12 @@ test('Validation a event title and content basic', () => {
 
 test('Validation start date', () => {
     //Arrange
-    const numDay = NUM_DAY[data.weekDay];
+    const numDay = NUM_DAY[data.weekday];
     const currentDay = new Date().getDay();
     const date = getDateCalendar(numDay, currentDay);
 
     //At
-    const result = createEvent(data.weekDay, data.week, data.openHour, data.closeHour);
+    const result = createEvent(data.weekday, data.week, data.openHour, data.closeHour);
 
     //Expected
     expect(result.start.toUTCString).toEqual(date.toUTCString);
@@ -51,14 +51,14 @@ test('Validation start date', () => {
 
 test('Validation date', () => {
     //Arrange
-    const numDay = NUM_DAY[data.weekDay];
+    const numDay = NUM_DAY[data.weekday];
     const currentDay = new Date().getDay();
     const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
     const date = getDateCalendar(numDay, currentDay);
     const dateResult = new Date(date).toLocaleDateString('es-ES', options);
 
     //At
-    const result = createEvent(data.weekDay, data.week, data.openHour, data.closeHour);
+    const result = createEvent(data.weekday, data.week, data.openHour, data.closeHour);
 
     //Expected
     expect(result.date).toStrictEqual(dateResult);
@@ -95,13 +95,20 @@ describe('Validation illegal arguments', () => {
 test('create an event list of at least 10 events', () => {
     //Arrange
     const events = [...Array(10)].map((event) => event = {
-        weekDay: Object.keys(NUM_DAY)[Math.floor(Math.random() * Object.keys(NUM_DAY).length)],
-        week: Math.trunc(Math.random() * 10),
+        weekday: Object.keys(NUM_DAY)[Math.floor(Math.random() * 6)],
+        week: Math.trunc(Math.random() * 8) + 1,
         openHour: 8,
-        closeHour: Math.trunc(Math.random() * 14),
+        closeHour: Math.trunc(Math.random() * 14) + 9,
     });
 
-    //At
-
     //Expected
+    events.map(eventData => {
+        const duration = [eventData.closeHour - eventData.openHour, "hour"]
+
+        const result = createEvent(eventData.weekday, eventData.week, eventData.openHour, eventData.closeHour)
+
+        expect(result.title).toBe("[SOFKA U] Meeting Room");
+        expect(result.description).toBe("Mentoring and Practice");
+        expect(result.duration).toEqual(duration);
+    })
 });
